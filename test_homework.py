@@ -7,7 +7,6 @@ def test_dark_theme_by_time():
     """
     current_time = time(hour=23)
 
-    is_dark_theme = None
     if 6 < current_time.hour < 22:
         is_dark_theme = False
     else:
@@ -23,16 +22,15 @@ def test_dark_theme_by_time_and_user_choice():
     dark_theme_enabled_by_user = False - Темная тема выключена
     dark_theme_enabled_by_user = None - Пользователь не сделал выбор (используется переключение по времени системы)
     """
-    current_time = time(hour=16)
+    current_time = time(hour=22)
     dark_theme_enabled_by_user = True
 
-    is_dark_theme = None
-    if dark_theme_enabled_by_user:
+    if dark_theme_enabled_by_user is None and (current_time.hour >= 22 or current_time.hour <= 6):
         is_dark_theme = True
-    elif 6 < current_time.hour < 22:
+    elif dark_theme_enabled_by_user is None and (6 < current_time.hour < 22):
         is_dark_theme = False
     else:
-        is_dark_theme = True
+        is_dark_theme = dark_theme_enabled_by_user
 
     assert is_dark_theme is True
 
@@ -83,6 +81,7 @@ def print_func(func, *args):
     for part in func.__name__.split('_'):
         name += part.capitalize() + ' '
     params = ', '.join([*args])
+    print(f'{name}[{params}]')
     return f'{name}[{params}]'
 
 
